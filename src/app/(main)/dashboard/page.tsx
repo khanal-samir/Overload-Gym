@@ -4,7 +4,8 @@ import { StatsGrid } from '@/components/dashboard/StatsGrid';
 import { MonthlyProgress } from '@/components/dashboard/MonthlyProgress';
 import { WorkoutProgressAnalytics } from '@/components/dashboard/WorkoutProgressAnalytics';
 import { QuickActions } from '@/components/dashboard/QuickActions';
-
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 interface WorkoutProgress {
   name: string;
   current: number;
@@ -12,8 +13,12 @@ interface WorkoutProgress {
   trend: 'up' | 'down';
 }
 
-export default function Dashboard() {
-  // Mock data - in a real app, this would come from your database
+export default async function Dashboard() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  console.log(session?.user);
+
   const stats = {
     currentStreak: 7,
     totalWorkouts: 45,
