@@ -1,4 +1,6 @@
+'use client';
 import { Button } from '@/components/ui/button';
+import { authClient } from '@/lib/auth-client';
 
 interface GoogleSignInButtonProps {
   className?: string;
@@ -9,8 +11,15 @@ export function GoogleSignInButton({
   className,
   size = 'default',
 }: GoogleSignInButtonProps) {
+  const signIn = async () => {
+    await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: '/dashboard',
+    });
+  };
+
   return (
-    <Button className={className} size={size}>
+    <Button className={className} size={size} onClick={signIn}>
       <svg className="w-5 h-5" viewBox="0 0 24 24">
         <path
           fill="currentColor"

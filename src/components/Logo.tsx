@@ -1,5 +1,8 @@
+'use client';
 import React from 'react';
 import { Star } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
+import { useRouter } from 'next/navigation';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -7,6 +10,7 @@ interface LogoProps {
 }
 
 export const Logo: React.FC<LogoProps> = ({ size = 'md', className = '' }) => {
+  const router = useRouter();
   const sizeClasses = {
     sm: {
       container: 'w-8 h-8',
@@ -26,7 +30,18 @@ export const Logo: React.FC<LogoProps> = ({ size = 'md', className = '' }) => {
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div
+      className={`relative ${className}`}
+      onClick={async () =>
+        await authClient.signOut({
+          fetchOptions: {
+            onSuccess: () => {
+              router.push('/'); // redirect to login page
+            },
+          },
+        })
+      }
+    >
       <h1
         className={`font-bold bg-primary bg-clip-text text-transparent ${sizeClasses[size].logo}`}
       >
